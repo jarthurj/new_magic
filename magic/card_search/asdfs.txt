@@ -1,0 +1,24 @@
+keys_left = [
+"released_at",
+"cardmarket_id",
+"oracle_text",
+"legalities",#need to split this up
+"power",
+"oracle_id",
+"defense",
+"toughness",
+"mana_cost",#need to split this up
+"image_uris",
+"id",
+"tcgplayer_id",
+"cmc",
+"set_id",#start other models
+"rarity",
+"keywords",
+"set_name",
+"color_identity",
+"name",
+"type_line",
+"colors",
+"set",
+]
