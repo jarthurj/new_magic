@@ -1,0 +1,11 @@
+{% extends "./base.html" %}
+    {% block content %}
+    {% comment %} {% if request.user.is_authenticated %}
+        <h2>Hello {{request.user.username}}</h2>
+    {% else %}
+        <h2>Welcome to blogger</h2>
+    {% endif %} {% endcomment %}
+    {% for post in posts %}
+        <p><a href="{% url 'viewpost' post.id %}">{{post.title}} {{post.created_at}}</a>
+    {% endfor %}
+{% endblock %}h
