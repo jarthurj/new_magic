@@ -40,8 +40,6 @@ class Name(models.Model):
 class Card(models.Model):
     scryfall_id = models.CharField(max_length=100,null=True,blank=True)
     oracle_id = models.CharField(max_length=100,null=True,blank=True)
-    # tcgplayer_id = models.PositiveIntegerField(null=True,blank=True)
-    # cardmarket_id = models.PositiveIntegerField(null=True,blank=True)
     image_uri = models.URLField(null=True,blank=True)#take out https://
     mana_cost_numeric = models.PositiveIntegerField(null=True,blank=True)
     cmc = models.FloatField(null=True,blank=True)
