@@ -1,0 +1,40 @@
+{% extends "./base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+
+    {% for card in results %}
+        <div class="bg-white rounded-xl shadow-md hover:scale-125 transition">
+            {% if card.image_uri != None %}
+                <img src="{{ card.image_uri }}" class="rounded-lg">
+            {% else %}
+                <div class="p-3">
+                    <p>{{ card.name.name }}</p>
+                    <p>-</p>
+                    <p>Image for this card is currently broken</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+    <div class="pagination justify-center text-stone-900 flex p-7">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 text-sm bg-blue-100 rounded hover:bg-amber-500"><<</a>
+        {% endif %}
+
+        <span class="mt-1 mx-4">
+            PAGE {{ page_obj.number }} OF {{ page_obj.paginator.num_pages }}
+            {% comment %} ADD IN JUMP TO PAGE FEATURE {% endcomment %}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 text-sm bg-blue-100 rounded hover:bg-amber-500">>></a>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

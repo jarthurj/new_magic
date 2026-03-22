@@ -5,9 +5,13 @@ url_base = "https://cards.scryfall.io/normal/"
 class SetId(models.Model):
     set_id = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.set_id 
 class SetCode(models.Model):
     set_code = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.set_code 
 class SetName(models.Model):
     set_name = models.CharField(max_length=50)
 

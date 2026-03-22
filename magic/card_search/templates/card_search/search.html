@@ -1,0 +1,22 @@
+{% extends "./base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div>
+        {{ form.set_code.label_tag}}
+        {{ form.set_code }}
+    </div>
+    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+        Submit
+    </button>
+</form>
+
+
+
+
+{% endblock %}
