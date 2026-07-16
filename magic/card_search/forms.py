@@ -32,6 +32,16 @@ class CardSearchForm(forms.Form):
         )
     )
 
+    name = forms.CharField(
+        required=False,
+        label="Name Search",
+        widget=forms.TextInput(
+            attrs={
+                'class': SELECT_CLASS,
+                'placeholder': 'Enter card name...'
+            }
+        )
+    )
 # rarity
 # name
 # colors

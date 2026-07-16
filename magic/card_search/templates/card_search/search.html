@@ -5,13 +5,15 @@
 
 {% block content %}
 
-<form method="post" class="space-y-4">
+<form method="GET" action = "{% url 'results' %}"class="space-y-4">
     {% csrf_token %}
     <div>
         {{ form.set_name.label_tag}}
         {{ form.set_name }}
         {{ form.rarity.label_tag}}
         {{ form.rarity }}
+        {{ form.name.label_tag}}
+        {{ form.name }}
     </div>
     <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
         Submit

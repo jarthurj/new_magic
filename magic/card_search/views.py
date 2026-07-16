@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import ListView,View,FormView
 from .models import Card
 from .forms import (CardSearchForm)
+from django.core.paginator import Paginator
+from urllib.parse import urlencode
 
 class Home(ListView):
     model = Card
@@ -12,28 +14,41 @@ class Home(ListView):
         return Card.objects.all()
 
 
-class Search(View):
-    template_name = 'card_search/search.html'
-
+class Results(View):
+    paginate_by = 24
     def get(self, request):
-        form = CardSearchForm()
-        return render(request, self.template_name, {'form': form, 'results': []})
-
-    def post(self, request):
-        form = CardSearchForm(request.POST)
-        results = []
+        form = CardSearchForm(request.GET)
+        cards = Card.objects.all()
 
         if form.is_valid():
-            # Get selected SetCode instance
-            set_name_selected_cards = form.cleaned_data['set_name']  # this is already a SetCode instance
+            set_name_selected_cards = form.cleaned_data['set_name']
             rarity_selected_cards = form.cleaned_data['rarity']
-            cards = Card.objects.all()
+            name_selected_cards = form.cleaned_data['name']
+
             if set_name_selected_cards:
                 cards = cards.filter(set_name=set_name_selected_cards)
+
             if rarity_selected_cards:
                 cards = cards.filter(rarity=rarity_selected_cards)
-            # Fetch all related Card objects
 
+            if name_selected_cards:
+                cards = cards.filter(name__name__icontains=name_selected_cards)
 
-        return render(request, 'card_search/results.html', {'form': form, 'results': cards})
-    
+        paginator = Paginator(cards, self.paginate_by)
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        query = request.GET.copy()
+        query.pop("page", None)
+
+        return render(request, 'card_search/results.html', {
+            'form': form,
+            'page_obj': page_obj,
+            'query': query.urlencode()
+        })
+class Search(View):
+    template_name = 'card_search/search.html'
+    def get(self, request):
+        form = CardSearchForm()
+        return render(request, self.template_name, {'form': form})
