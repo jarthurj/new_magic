@@ -12,12 +12,18 @@ class SetCode(models.Model):
 
     def __str__(self):
         return self.set_code 
+    
 class SetName(models.Model):
     set_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.set_name
 
 class Rarity(models.Model):
     rarity = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.rarity
 class Color(models.Model):
     symbol = models.CharField(max_length=1)
 
@@ -52,12 +58,12 @@ class Card(models.Model):
     commander_legal = models.BooleanField(blank=True,null=True)
     set_id = models.ForeignKey(SetId,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)
     set_code = models.ForeignKey(SetCode,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)
-    set_name = models.ForeignKey(SetName,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)
-    rarity = models.ForeignKey(Rarity,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)
-    name = models.ForeignKey(Name,on_delete=models.CASCADE,related_name="cards",null=True)
+    set_name = models.ForeignKey(SetName,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)#search field
+    rarity = models.ForeignKey(Rarity,on_delete=models.CASCADE,related_name="cards",blank=True,null=True)#search field
+    name = models.ForeignKey(Name,on_delete=models.CASCADE,related_name="cards",null=True)#search field
     released_at = models.ForeignKey(ReleasedAt,on_delete=models.CASCADE,related_name="cards",null=True,blank=True)
-    colors = models.ManyToManyField(Color,related_name="cards",blank=True)
+    colors = models.ManyToManyField(Color,related_name="cards",blank=True)#search field
     color_identity = models.ManyToManyField(ColorIdentity,related_name="cards",blank=True)
-    keywords = models.ManyToManyField(Keywords,related_name="cards",blank=True)
+    keywords = models.ManyToManyField(Keywords,related_name="cards",blank=True)#search field
     mana_cost_color = models.ManyToManyField(ManaCostColor,related_name="cards",null=True,blank=True)
-    type = models.ForeignKey(Type,on_delete=models.CASCADE,null=True,blank=True)
+    type = models.ForeignKey(Type,on_delete=models.CASCADE,null=True,blank=True)#search field

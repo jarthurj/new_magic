@@ -3,18 +3,41 @@ from .models import (SetId,SetCode,SetName,Rarity,Color,
                     ColorIdentity,Keywords,ManaCostColor,Type,ReleasedAt,
                     Name,Card)
 
-class SetCodeForm(forms.ModelForm):
+SELECT_CLASS = (
+    "block w-full rounded-md border-gray-300 shadow-sm "
+    "focus:border-indigo-500 focus:ring "
+    "focus:ring-indigo-200 focus:ring-opacity-50"
+)
 
-    set_code = forms.ModelChoiceField(
-        queryset=SetCode.objects.all(),           # all SetId objects
-        empty_label="Select Set Code",            # placeholder option
-        to_field_name="set_code",                     # use set_id value instead of object ID
+class CardSearchForm(forms.Form):
+
+
+
+
+    set_name = forms.ModelChoiceField(
+        queryset=SetName.objects.order_by('set_name'),
+        required=False,
+        empty_label="All Set Names",
         widget=forms.Select(
-            attrs={
-                'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            }
+            attrs={'class': SELECT_CLASS}
         )
     )
-    class Meta:
-        model = SetCode
-        fields = ['set_code']
+
+    rarity = forms.ModelChoiceField(
+        queryset=Rarity.objects.all(),
+        required=False,
+        empty_label="All Rarity",
+        widget=forms.Select(
+            attrs={'class': SELECT_CLASS}
+        )
+    )
+
+# rarity
+# name
+# colors
+# keywords
+# type
+
+    # class Meta:
+    #     model = SetName
+    #     fields = ['set_name','rarity']
