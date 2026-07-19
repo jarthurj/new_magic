@@ -42,6 +42,26 @@ class CardSearchForm(forms.Form):
             }
         )
     )
+    type = forms.ModelChoiceField(
+        queryset=Type.objects.order_by('type'),
+        required=False,
+        empty_label="All Types",
+        widget=forms.Select(
+            attrs={'class': SELECT_CLASS}
+        )
+    )
+
+    cmc = forms.ModelChoiceField(
+        queryset=Card.objects
+            .values_list('cmc', flat=True)
+            .distinct()
+            .order_by('cmc'),
+        required=False,
+        empty_label="Converted Mana Cost",
+        widget=forms.Select(
+            attrs={'class': SELECT_CLASS}
+        )
+    )
 # rarity
 # name
 # colors

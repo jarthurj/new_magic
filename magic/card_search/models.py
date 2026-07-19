@@ -26,26 +26,36 @@ class Rarity(models.Model):
         return self.rarity
 class Color(models.Model):
     symbol = models.CharField(max_length=1)
-
+    def __str__(self):
+        return self.symbol
 class ColorIdentity(models.Model):
     symbol = models.CharField(max_length=1)
-
+    def __str__(self):
+        return self.symbol
 class Keywords(models.Model):
     keyword = models.CharField(max_length=50)
-
+    def __str__(self):
+        return self.keyword
 class ManaCostColor(models.Model):
     symbol = models.CharField(max_length=1)
     quantity = models.IntegerField(null=True)
-
+    def __str__(self):
+        return self.symbol+self.quantity
+    
 class Type(models.Model):
     type =  models.CharField(max_length =100)
+    def __str__(self):
+        return self.type
 
 class ReleasedAt(models.Model):
     release_date = models.DateTimeField(null=True)
-
+    def __str__(self):
+        return self.release_date
 class Name(models.Model):
     name = models.CharField(max_length=100)
-#query optimization
+    def __str__(self):
+        return self.name
+    #query optimization
 #probably remove blanks
 class Card(models.Model):
     scryfall_id = models.CharField(max_length=100,null=True,blank=True)

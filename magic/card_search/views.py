@@ -19,12 +19,14 @@ class Results(View):
     def get(self, request):
         form = CardSearchForm(request.GET)
         cards = Card.objects.all()
-
+        
         if form.is_valid():
+
             set_name_selected_cards = form.cleaned_data['set_name']
             rarity_selected_cards = form.cleaned_data['rarity']
             name_selected_cards = form.cleaned_data['name']
-
+            type_selected_cards = form.cleaned_data['type']
+            cmc_selected_cards = form.cleaned_data['cmc']
             if set_name_selected_cards:
                 cards = cards.filter(set_name=set_name_selected_cards)
 
@@ -34,12 +36,19 @@ class Results(View):
             if name_selected_cards:
                 cards = cards.filter(name__name__icontains=name_selected_cards)
 
-        paginator = Paginator(cards, self.paginate_by)
+            if type_selected_cards:
+                cards = cards.filter(type=type_selected_cards)
 
+            if cmc_selected_cards:
+                cards = cards.filter(cmc=cmc_selected_cards)
+
+        paginator = Paginator(cards, self.paginate_by)
+        print(form.cleaned_data['cmc'])
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         query = request.GET.copy()
+
         query.pop("page", None)
 
         return render(request, 'card_search/results.html', {
