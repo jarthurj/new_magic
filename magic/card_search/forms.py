@@ -2,6 +2,7 @@ from django import forms
 from .models import (SetId,SetCode,SetName,Rarity,Color,
                     ColorIdentity,Keywords,ManaCostColor,Type,ReleasedAt,
                     Name,Card)
+from decimal import Decimal
 
 SELECT_CLASS = (
     "block w-full rounded-md border-gray-300 shadow-sm "
@@ -12,7 +13,10 @@ SELECT_CLASS = (
 class CardSearchForm(forms.Form):
 
 
-
+    def decimal_or_none(value):
+        if value == "None":
+            return None
+        return Decimal(value)
 
     set_name = forms.ModelChoiceField(
         queryset=SetName.objects.order_by('set_name'),
@@ -50,18 +54,26 @@ class CardSearchForm(forms.Form):
             attrs={'class': SELECT_CLASS}
         )
     )
-
-    cmc = forms.ModelChoiceField(
-        queryset=Card.objects
-            .values_list('cmc', flat=True)
-            .distinct()
-            .order_by('cmc'),
+    cmc = forms.TypedChoiceField(
+        choices=[
+            (str(v), str(v))
+            for v in Card.objects.values_list("cmc", flat=True).distinct().order_by("cmc")
+        ],
+        coerce=decimal_or_none,
         required=False,
-        empty_label="Converted Mana Cost",
+        empty_value=None,
+        widget=forms.Select(attrs={"class": SELECT_CLASS}),
+    )
+
+    keywords = forms.ModelChoiceField(
+        queryset=Keywords.objects.order_by('keyword'),
+        required=False,
+        empty_label="All Keywords",
         widget=forms.Select(
             attrs={'class': SELECT_CLASS}
         )
     )
+
 # rarity
 # name
 # colors

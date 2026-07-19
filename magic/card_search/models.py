@@ -62,7 +62,8 @@ class Card(models.Model):
     oracle_id = models.CharField(max_length=100,null=True,blank=True)
     image_uri = models.URLField(null=True,blank=True)#take out https://
     mana_cost_numeric = models.PositiveIntegerField(null=True,blank=True)
-    cmc = models.FloatField(null=True,blank=True)
+    cmc = models.DecimalField(null=True,blank=True,decimal_places=1,max_digits=10)#change to decimal field
+
     oracle_text = models.CharField(max_length=1000,null=True,blank=True)
     standard_legal = models.BooleanField(blank=True,null=True)
     commander_legal = models.BooleanField(blank=True,null=True)
