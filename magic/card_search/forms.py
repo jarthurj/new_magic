@@ -73,6 +73,14 @@ class CardSearchForm(forms.Form):
             attrs={'class': SELECT_CLASS}
         )
     )
+    color = forms.ModelChoiceField(
+        queryset=Color.objects.order_by('symbol'),
+        required=False,
+        empty_label="All Colors",
+        widget=forms.Select(
+            attrs={'class': SELECT_CLASS}
+        )
+    )
 
 # rarity
 # name

@@ -19,11 +19,6 @@ class Results(View):
     def get(self, request):
         form = CardSearchForm(request.GET)
         cards = Card.objects.all()
-        # print("ERRORS",form.errors.as_data())
-        # print(request.GET)
-        # print(form.data["cmc"],"TYPE",type(form.data["cmc"]))
-
-        print("KAJSLDKFJ;LAKSDJFLK;AJSDL;FJKAS;DLF")
 
         if form.is_valid():
 
@@ -33,6 +28,7 @@ class Results(View):
             type_selected_cards = form.cleaned_data['type']
             cmc_selected_cards = form.cleaned_data['cmc']
             keywords_selected_cards = form.cleaned_data['keywords']
+            color_selected_cards = form.cleaned_data['color']
             if set_name_selected_cards:
                 cards = cards.filter(set_name=set_name_selected_cards)
 
@@ -50,11 +46,11 @@ class Results(View):
 
             if keywords_selected_cards :
                 cards = cards.filter(keywords=keywords_selected_cards)
-        else:
-            for f in form.cleaned_data:
-                print(f)
+
+            if color_selected_cards:
+                cards = cards.filter(colors=color_selected_cards)
+
         paginator = Paginator(cards, self.paginate_by)
-        print(form.cleaned_data['cmc'])
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -67,6 +63,7 @@ class Results(View):
             'page_obj': page_obj,
             'query': query.urlencode()
         })
+
 class Search(View):
     template_name = 'card_search/search.html'
     def get(self, request):
