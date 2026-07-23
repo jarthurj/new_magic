@@ -7,7 +7,7 @@
 
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
 
-    {% for card in page_obj %}
+
         <div class="bg-white rounded-xl shadow-md hover:scale-125 transition">
             {% if card.image_uri != None %}
                 <a href="{% url 'card' card.id%}"><img src="{{ card.image_uri }}" class="rounded-lg"></a>
@@ -19,25 +19,8 @@
                 </div>
             {% endif %}
         </div>
-    {% endfor %}
+        <div class="">
+        </div>
 </div>
-    <div class="pagination justify-center text-stone-900 flex p-7">
-        {% if page_obj.has_previous %}
-            <a href="?{{ query }}&page={{ page_obj.previous_page_number }}">
-                <<
-            </a>
-        {% endif %}
-
-        <span class="mt-1 mx-4">
-            PAGE {{ page_obj.number }} OF {{ page_obj.paginator.num_pages }}
-            {% comment %} ADD IN JUMP TO PAGE FEATURE {% endcomment %}
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?{{ query }}&page={{ page_obj.next_page_number }}">
-                >>
-            </a>
-        {% endif %}
-    </div>
 
 {% endblock %}

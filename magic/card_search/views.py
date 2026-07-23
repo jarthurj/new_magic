@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.generic import ListView,View,FormView
+from django.views.generic import ListView,View,FormView,DetailView
 from .models import Card
 from .forms import (CardSearchForm)
 from django.core.paginator import Paginator
@@ -69,3 +69,7 @@ class Search(View):
     def get(self, request):
         form = CardSearchForm()
         return render(request, self.template_name, {'form': form})
+
+class CardDetailView(DetailView):
+    model = Card
+    template_name = "card_search/card.html"
