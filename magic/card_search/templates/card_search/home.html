@@ -4,37 +4,43 @@
 {% endblock %}
 
 {% block content %}
+<div class="min-h-screen flex items-center justify-center">
+<form method="GET" action="{% url 'search' %}" class="mx-auto max-w-3xl space-y-4 w-full">
 
-<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+    <!-- Search Bar -->
+    <input
+        type="text"
+        name="q"
+        placeholder="Search for a card..."
+        class="w-full rounded-xl border border-gray-300 bg-white px-5 py-3 text-lg
+               shadow-sm transition
+               focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+               outline-none"
+    >
 
-    {% for card in object_list %}
-        <div class="bg-white rounded-xl shadow-md hover:scale-125 transition">
-            {% if card.image_uri != None %}
-                <img src="{{ card.image_uri }}" class="rounded-lg">
-            {% else %}
-                <div class="p-3">
-                    <p>{{ card.name.name }}</p>
-                    <p>-</p>
-                    <p>Image for this card is currently broken</p>
-                </div>
-            {% endif %}
-        </div>
-    {% endfor %}
-</div>
-    <div class="pagination justify-center text-stone-900 flex p-7">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 text-sm bg-blue-100 rounded hover:bg-amber-500"><<</a>
-        {% endif %}
+    <!-- Buttons -->
+    <div class="flex gap-4">
 
-        <span class="mt-1 mx-4">
-            PAGE {{ page_obj.number }} OF {{ page_obj.paginator.num_pages }}
-            {% comment %} ADD IN JUMP TO PAGE FEATURE {% endcomment %}
-        </span>
+        <button
+            type="submit"
+            class="flex-1 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white
+                   shadow-md transition hover:bg-blue-700 active:scale-95"
+        >
+            Search
+        </button>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 text-sm bg-blue-100 rounded hover:bg-amber-500">>></a>
-        {% endif %}
+        <a
+            href="{% url 'search' %}"
+            class="flex-1 rounded-xl border border-gray-300 bg-white px-6 py-3
+                   text-center font-semibold text-gray-700 shadow-md
+                   transition hover:bg-gray-100 active:scale-95"
+        >
+            Advanced Search
+        </a>
+
     </div>
+</div>
+</form>
 
 
 {% endblock %}
