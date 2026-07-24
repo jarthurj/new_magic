@@ -50,7 +50,7 @@ class Type(models.Model):
 class ReleasedAt(models.Model):
     release_date = models.DateTimeField(null=True)
     def __str__(self):
-        return self.release_date
+        return str(self.release_date.year)+"-"+str(self.release_date.month)+"-"+str(self.release_date.day)
 class Name(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):

@@ -5,22 +5,102 @@
 
 {% block content %}
 
-<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+<div class="mx-auto max-w-7xl px-6 py-10">
 
+    <div class="grid gap-10 lg:grid-cols-2">
 
-        <div class="bg-white rounded-xl shadow-md hover:scale-125 transition">
-            {% if card.image_uri != None %}
-                <a href="{% url 'card' card.id%}"><img src="{{ card.image_uri }}" class="rounded-lg"></a>
+        <!-- Card Image -->
+        <div class="flex justify-center">
+            {% if card.image_uri %}
+                <img
+                    src="{{ card.image_uri }}"
+                    alt="{{ card.name }}"
+                    class="w-full max-w-sm rounded-2xl shadow-2xl transition duration-300 hover:scale-105"
+                >
             {% else %}
-                <div class="p-3">
-                    <p>{{ card.name.name }}</p>
-                    <p>-</p>
-                    <p>Image for this card is currently broken</p>
+                <div class="flex h-[500px] w-full max-w-sm items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-100 text-center text-gray-500">
+                    Image unavailable
                 </div>
             {% endif %}
         </div>
-        <div class="">
+
+        <!-- Card Details -->
+        <div class="rounded-2xl bg-white p-8 shadow-xl">
+
+            <h1 class="mb-2 text-4xl font-bold text-gray-900">
+                {{ card.name }}
+            </h1>
+
+            <p class="mb-6 text-lg text-gray-500">
+                {{ card.type }}
+            </p>
+
+            <div class="space-y-6">
+
+                <div>
+                    <h2 class="mb-2 text-lg font-semibold text-gray-800">
+                        Oracle Text
+                    </h2>
+                    <p class="whitespace-pre-line text-gray-700">
+                        {{ card.oracle_text }}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+
+                    <div>
+                        <p class="text-sm text-gray-500">Set</p>
+                        <p class="font-medium">{{ card.set_name }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500">Rarity</p>
+                        <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
+                            {{ card.rarity }}
+                        </span>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500">Released</p>
+                        <p>{{ card.released_at }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500">Standard</p>
+
+                        {% if card.standard_legal %}
+                            <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                                Legal
+                            </span>
+                        {% else %}
+                            <span class="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                                Not Legal
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-gray-500">Commander</p>
+
+                        {% if card.commander_legal %}
+                            <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                                Legal
+                            </span>
+                        {% else %}
+                            <span class="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                                Not Legal
+                            </span>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
+    </div>
+
 </div>
 
 {% endblock %}
