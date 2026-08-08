@@ -1,20 +1,130 @@
-
 {% extends "card_search/base.html" %}
 
 {% block title %}
+    Dashboard
 {% endblock %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<div class="min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
 
-<p>Welcome {{ user.username }}</p>
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+                Dashboard
+            </h1>
+            <p class="mt-2 text-sm text-gray-500">
+                Welcome back, {{ user.username }}
+            </p>
+        </div>
 
-<p>Email: {{ user.email }}</p>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">
-        Logout
-    </button>
-</form>
+            <!-- User Information -->
+            <div class="lg:col-span-1">
+                <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">
+                        Your Information
+                    </h2>
+
+                    <div class="mt-6 space-y-5">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">
+                                Username
+                            </p>
+                            <p class="mt-1 text-sm text-gray-900">
+                                {{ user.username }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">
+                                Email
+                            </p>
+                            <p class="mt-1 text-sm text-gray-900">
+                                {{ user.email }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-200 pt-6">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button
+                                type="submit"
+                                class="inline-flex w-full items-center justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            >
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decks -->
+            <div class="lg:col-span-2">
+                <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200">
+                    <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900">
+                                Your Decks
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-500">
+                                Manage your card decks.
+                            </p>
+                        </div>
+
+                        <a
+                            href="#"
+                            class="rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
+                        >
+                            New Deck
+                        </a>
+                    </div>
+
+                    <div class="divide-y divide-gray-200">
+                        {% for deck in decks %}
+                            <div class="flex items-center justify-between px-6 py-5 transition hover:bg-gray-50">
+                                <div>
+                                    <h3 class="text-sm font-semibold text-gray-900">
+                                        {{ deck.name }}
+                                    </h3>
+
+                                    {% if deck.description %}
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            {{ deck.description }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                <a
+                                    href="#"
+                                    class="ml-4 text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+                                >
+                                    View
+                                </a>
+                            </div>
+                        {% empty %}
+                            <div class="px-6 py-12 text-center">
+                                <h3 class="text-sm font-semibold text-gray-900">
+                                    No decks yet
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Create your first deck to get started.
+                                </p>
+
+                                <a
+                                    href="#"
+                                    class="mt-4 inline-flex rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                                >
+                                    Create a deck
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
