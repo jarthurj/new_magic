@@ -17,38 +17,42 @@ class Home(ListView):
 class Results(View):
     paginate_by = 24
     def get(self, request):
-        form = CardSearchForm(request.GET)
         cards = Card.objects.all()
+        form = CardSearchForm(request.GET)
+        if request.GET.get('q', '') != '':
+            cards = cards.filter(name__name__icontains=request.GET.get('q'))
+        else:
+            
 
-        if form.is_valid():
+            if form.is_valid():
 
-            set_name_selected_cards = form.cleaned_data['set_name']
-            rarity_selected_cards = form.cleaned_data['rarity']
-            name_selected_cards = form.cleaned_data['name']
-            type_selected_cards = form.cleaned_data['type']
-            cmc_selected_cards = form.cleaned_data['cmc']
-            keywords_selected_cards = form.cleaned_data['keywords']
-            color_selected_cards = form.cleaned_data['color']
-            if set_name_selected_cards:
-                cards = cards.filter(set_name=set_name_selected_cards)
+                set_name_selected_cards = form.cleaned_data['set_name']
+                rarity_selected_cards = form.cleaned_data['rarity']
+                name_selected_cards = form.cleaned_data['name']
+                type_selected_cards = form.cleaned_data['type']
+                cmc_selected_cards = form.cleaned_data['cmc']
+                keywords_selected_cards = form.cleaned_data['keywords']
+                color_selected_cards = form.cleaned_data['color']
+                if set_name_selected_cards:
+                    cards = cards.filter(set_name=set_name_selected_cards)
 
-            if rarity_selected_cards:
-                cards = cards.filter(rarity=rarity_selected_cards)
+                if rarity_selected_cards:
+                    cards = cards.filter(rarity=rarity_selected_cards)
 
-            if name_selected_cards:
-                cards = cards.filter(name__name__icontains=name_selected_cards)
+                if name_selected_cards:
+                    cards = cards.filter(name__name__icontains=name_selected_cards)
 
-            if type_selected_cards:
-                cards = cards.filter(type=type_selected_cards)
+                if type_selected_cards:
+                    cards = cards.filter(type=type_selected_cards)
 
-            if cmc_selected_cards:
-                cards = cards.filter(cmc=cmc_selected_cards)
+                if cmc_selected_cards:
+                    cards = cards.filter(cmc=cmc_selected_cards)
 
-            if keywords_selected_cards :
-                cards = cards.filter(keywords=keywords_selected_cards)
+                if keywords_selected_cards :
+                    cards = cards.filter(keywords=keywords_selected_cards)
 
-            if color_selected_cards:
-                cards = cards.filter(colors=color_selected_cards)
+                if color_selected_cards:
+                    cards = cards.filter(colors=color_selected_cards)
 
         paginator = Paginator(cards, self.paginate_by)
         page_number = request.GET.get('page')

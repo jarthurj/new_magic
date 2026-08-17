@@ -7,5 +7,6 @@ urlpatterns = [
     path('search/',Search.as_view(),name="search"),
     path('search/results/',Results.as_view(),name="results"),
     path("card/<int:pk>/", CardDetailView.as_view(), name="card"),
+
 ]
 

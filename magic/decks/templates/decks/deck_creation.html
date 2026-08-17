@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<form method="POST" action = "{% url 'results' %}"class="space-y-4">
+    {% csrf_token %}
+    <div>
+        {{ form.name.label_tag}}
+        {{ form.name }}
+        {{ form.format.label_tag}}
+        {{ form.format }}
+        {{ form.private.label_tag}}
+        {{ form.private }}
+
+    </div>
+    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+        Submit
+    </button>
+</form>
+
+
+
+
+{% endblock %}
