@@ -1,11 +1,11 @@
-{% extends "./base.html" %}
+{% extends "card_search/base.html" %}
 
 {% block title %}
 {% endblock %}
 
 {% block content %}
 
-<form method="POST" action = "{% url 'results' %}"class="space-y-4">
+<form method="POST" action = "{% url 'decks:deck_creation' %}" class="space-y-4">
     {% csrf_token %}
     <div>
         {{ form.name.label_tag}}

@@ -1,5 +1,5 @@
-from django import forms 
-
+from django import forms
+from .models import UserDeck
 
 SELECT_CLASS = (
     "block w-full rounded-md border-gray-300 shadow-sm "
@@ -7,32 +7,20 @@ SELECT_CLASS = (
     "focus:ring-indigo-200 focus:ring-opacity-50"
 )
 
-class DeckCreationForm(forms.Form):
+INPUT_CLASS = (
+    "block w-full rounded-md border-gray-300 shadow-sm "
+    "focus:border-indigo-500 focus:ring "
+    "focus:ring-indigo-200 focus:ring-opacity-50"
+)
 
-    name = forms.CharField(
-        required=True,
-        label="Deck Name",
-        widget=forms.TextInput(
-            attrs={
-                'class': SELECT_CLASS,
-                'placeholder': 'Enter deck name...'
-            }
-        )
+CHECKBOX_CLASS = "rounded border-gray-300 text-indigo-600"
 
-    format = forms.ChoiceField(
-        choices=[
-            ('', 'All Set Names'),
-            ('standard', 'Standard'),
-            ('commander', 'commander'),
-        ],
-        required=False,
-        widget=forms.Select(attrs={'class': SELECT_CLASS})
-    )
-
-    private = forms.BooleanField(
-        required=True,
-        label="Make this private",
-        widget=forms.CheckboxInput(attrs={
-            'class': 'rounded h-4 w-4'
-        })
-    )
+class DeckCreationForm(forms.ModelForm):
+    class Meta:
+        model = UserDeck
+        fields = ['name', 'format', 'private']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': INPUT_CLASS}),
+            'format': forms.Select(attrs={'class': SELECT_CLASS}),
+            'private': forms.CheckboxInput(attrs={'class': CHECKBOX_CLASS}),
+        }
