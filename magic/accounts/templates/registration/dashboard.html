@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="divide-y divide-gray-200">
-                        {% for deck in decks %}
+                        {% for deck in user.decks.all %}
                             <div class="flex items-center justify-between px-6 py-5 transition hover:bg-gray-50">
                                 <div>
                                     <h3 class="text-sm font-semibold text-gray-900">
@@ -97,7 +97,7 @@
                                 </div>
 
                                 <a
-                                    href="#"
+                                    href="{% url "decks:deck_detail" deck.id%}"
                                     class="ml-4 text-sm font-semibold text-indigo-600 hover:text-indigo-500"
                                 >
                                     View
