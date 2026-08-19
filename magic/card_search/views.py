@@ -4,6 +4,10 @@ from .models import Card
 from .forms import (CardSearchForm)
 from django.core.paginator import Paginator
 from urllib.parse import urlencode
+from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.contrib.auth.decorators import login_required
+# from django.utils.decorators import method_decorator
+from decks.models import UserDeck
 
 class Home(ListView):
     model = Card
@@ -77,3 +81,21 @@ class Search(View):
 class CardDetailView(DetailView):
     model = Card
     template_name = "card_search/card.html"
+
+class CardDetailView(LoginRequiredMixin,DetailView):
+    model = Card
+    template_name = 'card_search/card.html'
+    context_object_name = 'card'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Add user's decks to context
+        if self.request.user.is_authenticated:
+            context['user_decks'] = UserDeck.objects.filter(
+                user=self.request.user
+            ).order_by('-created_at')
+        else:
+            context['user_decks'] = []
+        
+        return context

@@ -1,11 +1,11 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render,redirect
 from django.views.generic import View, DetailView
 from .models import UserDeck   
 from .forms import (DeckCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
+from card_search.models import Card
+from django.http import JsonResponse
+import json
 
 class DeckCreationView(LoginRequiredMixin,View):
     template_name = 'decks/deck_creation.html'
@@ -32,3 +32,97 @@ class DeckCreationView(LoginRequiredMixin,View):
 class DeckDetailView(DetailView):
     model = UserDeck
     template_name = "decks/deck_detail.html"
+
+class AddCardToDeckAPIView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        try:
+            
+            data = json.loads(request.body)
+            
+            deck_id = data.get('deck_id')
+            card_id = data.get('card_id')
+            
+            # Get deck (verify ownership)
+            deck = UserDeck.objects.get(pk=deck_id, user=request.user)
+            
+            # Get card
+            card = Card.objects.get(pk=card_id)
+            
+            # Add card to deck (avoid duplicates)
+            deck.card.add(card)
+            print("asssss")
+            # return JsonResponse({
+            #     'success': True,
+            #     'message': f'✅ Added {card.name} to {deck.name}',
+            #     'deck_name': deck.name,
+            #     'card_name': card.name,
+            # })
+            return JsonResponse({
+                'success': True,
+                'message': f'✅ Added to deck',
+            })
+        
+        except UserDeck.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Deck not found'}, status=404)
+        except Card.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Card not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+        
+class AddCardToDeckView(LoginRequiredMixin, View):
+    """
+    Handles adding a card to a deck via AJAX/Fetch request
+    URL: /decks/<int:pk>/add-card/
+    Method: POST
+    """
+    
+    def post(self, request, pk):
+        try:
+            # Get the deck (verify user owns it)
+            deck = UserDeck.objects.get(pk=pk, user=request.user)
+            
+            # Parse JSON from request body
+            data = json.loads(request.body)
+            card_id = data.get('card_id')
+            
+            # Get the card
+            card = Card.objects.get(id=card_id)
+            
+            # Add card to deck (ManyToMany)
+            deck.card.add(card)
+            
+            # Return success response
+            return JsonResponse({
+                'success': True,
+                'message': f'Added {card.name} to {deck.name}',
+                'card': {
+                    'id': card.id,
+                    'name': card.name,
+                    'type': card.type,
+                    'image_uri': card.image_uri,
+                    'rarity': card.rarity,
+                    'set_name': card.set_name,
+                }
+            })
+        
+        except UserDeck.DoesNotExist:
+            return JsonResponse(
+                {'success': False, 'error': 'Deck not found'}, 
+                status=404
+            )
+        except Card.DoesNotExist:
+            return JsonResponse(
+                {'success': False, 'error': 'Card not found'}, 
+                status=404
+            )
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {'success': False, 'error': 'Invalid JSON'}, 
+                status=400
+            )
+        except Exception as e:
+            return JsonResponse(
+                {'success': False, 'error': str(e)}, 
+                status=400
+            )
