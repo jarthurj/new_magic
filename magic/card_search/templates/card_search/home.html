@@ -4,7 +4,124 @@
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center">
+<div class="w-full mb-10 rounded-lg overflow-hidden shadow-2xl">
+    <svg width="100%" viewBox="0 0 1200 400" role="img" xmlns="http://www.w3.org/2000/svg">
+        <title>Fantasy Magic Mana Banner</title>
+        <desc>A fantasy-themed banner featuring five colors of magic</desc>
+        
+        <defs>
+            <linearGradient id="mainBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#0a0e27;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#1a1f3a;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#0f1428;stop-opacity:1" />
+            </linearGradient>
+            
+            <radialGradient id="redGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#7f1d1d;stop-opacity:0.2" />
+            </radialGradient>
+            
+            <radialGradient id="blueGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.2" />
+            </radialGradient>
+            
+            <radialGradient id="greenGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:#16a34a;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#15803d;stop-opacity:0.2" />
+            </radialGradient>
+            
+            <radialGradient id="whiteStar" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" style="stop-color:#f5f5f4;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#a3a3a3;stop-opacity:0.5" />
+            </radialGradient>
+        </defs>
+        
+        <rect width="1200" height="400" fill="url(#mainBg)"/>
+        
+        <circle cx="150" cy="50" r="1.5" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="280" cy="80" r="1" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="450" cy="40" r="1.5" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="700" cy="60" r="1" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="950" cy="45" r="1.5" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="1100" cy="90" r="1" fill="rgba(255,255,255,0.5)"/>
+        
+        <!-- Dragon -->
+        <g transform="translate(140, 180)">
+            <ellipse cx="0" cy="0" rx="45" ry="55" fill="#991b1b" opacity="0.9"/>
+            <circle cx="45" cy="-40" r="28" fill="#dc2626"/>
+            <polygon points="70,-40 90,-35 75,-45" fill="#991b1b"/>
+            <circle cx="55" cy="-45" r="6" fill="#fbbf24"/>
+            <path d="M 30 -15 Q 50 -40 60 -20 Q 45 5 20 0 Z" fill="#7f1d1d" opacity="0.8"/>
+            <circle cx="0" cy="0" r="80" fill="url(#redGlow)"/>
+        </g>
+        
+        <!-- Blue Portal -->
+        <g transform="translate(380, 140)">
+            <circle cx="0" cy="0" r="65" fill="none" stroke="#1e40af" stroke-width="3" opacity="0.7"/>
+            <circle cx="0" cy="0" r="55" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.6"/>
+            <circle cx="0" cy="0" r="45" fill="url(#blueGlow)"/>
+            <polygon points="0,-30 8,-12 28,-12 12,2 18,22 0,10 -18,22 -12,2 -28,-12 -8,-12" fill="#93c5fd" opacity="0.8"/>
+        </g>
+        
+        <!-- White Tower -->
+        <g transform="translate(600, 100)">
+            <polygon points="0,-80 50,-40 50,60 -50,60 -50,-40" fill="#f5f5f4" opacity="0.85"/>
+            <line x1="-50" y1="-40" x2="50" y2="-40" stroke="#d4d4d8" stroke-width="2"/>
+            <line x1="0" y1="-80" x2="0" y2="60" stroke="#e4e4e7" stroke-width="3"/>
+            <polygon points="0,-80 15,-50 0,-40" fill="#ffffff" opacity="0.6"/>
+            <circle cx="0" cy="80" r="60" fill="url(#whiteStar)"/>
+        </g>
+        
+        <!-- Green Vines -->
+        <g transform="translate(820, 160)">
+            <path d="M 0 -60 Q 20 -30 15 10 Q 10 40 -5 60" stroke="#16a34a" stroke-width="8" fill="none" opacity="0.8"/>
+            <path d="M 0 -60 Q -25 -25 -20 15 Q -15 45 0 60" stroke="#22c55e" stroke-width="8" fill="none" opacity="0.8"/>
+            <circle cx="15" cy="10" r="12" fill="#15803d" opacity="0.9"/>
+            <circle cx="-20" cy="15" r="12" fill="#15803d" opacity="0.9"/>
+            <circle cx="0" cy="-40" r="10" fill="#22c55e" opacity="0.8"/>
+            <circle cx="0" cy="0" r="75" fill="url(#greenGlow)"/>
+        </g>
+        
+        <!-- Black Void -->
+        <g transform="translate(1050, 190)">
+            <circle cx="0" cy="0" r="50" fill="none" stroke="#1f2937" stroke-width="4" opacity="0.9"/>
+            <circle cx="0" cy="0" r="40" fill="#0f0f0f" opacity="0.95"/>
+            <circle cx="0" cy="0" r="35" fill="#1f2937" opacity="0.6"/>
+            <circle cx="-15" cy="-20" r="3" fill="#9ca3af" opacity="0.8"/>
+            <circle cx="18" cy="15" r="2" fill="#6b7280" opacity="0.7"/>
+            <circle cx="5" cy="-25" r="2.5" fill="#9ca3af" opacity="0.7"/>
+            <polygon points="0,-55 5,-45 -5,-45" fill="#374151"/>
+            <polygon points="55,0 45,-5 45,5" fill="#374151"/>
+            <polygon points="0,55 -5,45 5,45" fill="#374151"/>
+            <polygon points="-55,0 -45,5 -45,-5" fill="#374151"/>
+        </g>
+        
+        <!-- Energy lines -->
+        <line x1="280" y1="180" x2="350" y2="170" stroke="#3b82f6" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,5"/>
+        <line x1="450" y1="170" x2="520" y2="180" stroke="#22c55e" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,5"/>
+        <line x1="680" y1="180" x2="750" y2="170" stroke="#16a34a" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,5"/>
+        <line x1="900" y1="170" x2="970" y2="190" stroke="#1f2937" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,5"/>
+        
+        <!-- Sparkles -->
+        <circle cx="500" cy="80" r="2" fill="#fbbf24" opacity="0.7"/>
+        <circle cx="650" cy="50" r="1.5" fill="#60a5fa" opacity="0.6"/>
+        <circle cx="750" cy="120" r="1" fill="#34d399" opacity="0.5"/>
+        <circle cx="300" cy="300" r="1.5" fill="#f87171" opacity="0.6"/>
+        <circle cx="850" cy="320" r="1" fill="#c084fc" opacity="0.5"/>
+        
+        <!-- Bottom border -->
+        <line x1="50" y1="360" x2="1150" y2="360" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        
+        <!-- Mana symbols -->
+        <circle cx="150" cy="375" r="8" fill="#dc2626" opacity="0.7"/>
+        <circle cx="350" cy="375" r="8" fill="#2563eb" opacity="0.7"/>
+        <circle cx="600" cy="375" r="8" fill="#f5f5f4" opacity="0.8"/>
+        <circle cx="850" cy="375" r="8" fill="#16a34a" opacity="0.7"/>
+        <circle cx="1050" cy="375" r="8" fill="#1f2937" opacity="0.8"/>
+    </svg>
+</div>
+<div class=" flex items-center justify-center">
 <form method="GET" action="{% url 'results' %}" class="mx-auto max-w-3xl space-y-4 w-full">
     {% csrf_token %}
     <!-- Search Bar -->
