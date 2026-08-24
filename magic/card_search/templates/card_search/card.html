@@ -12,12 +12,13 @@
     <div class="grid gap-10 lg:grid-cols-2">
 
         <!-- Card Image -->
-        <div class="flex justify-center">
+       <div class="flex justify-center rounded-2xl items-center">
+
             {% if card.image_uri %}
                 <img
                     src="{{ card.image_uri }}"
                     alt="{{ card.name }}"
-                    class="w-full max-w-sm rounded-2xl shadow-2xl transition duration-300 hover:scale-105"
+                    class="w-full max-w-sm rounded-2xl transition duration-300 hover:scale-105 object-contain"
                 >
             {% else %}
                 <div class="flex h-[500px] w-full max-w-sm items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-100 text-center text-gray-500">

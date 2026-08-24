@@ -10,7 +10,7 @@
     {% for card in page_obj %}
         <div class="bg-white rounded-xl shadow-md hover:scale-125 transition">
             {% if card.image_uri != None %}
-                <a href="{% url 'card' card.id%}"><img src="{{ card.image_uri }}" class="rounded-lg"></a>
+                <a href="{% url 'card_search:card' card.id%}"><img src="{{ card.image_uri }}" class="rounded-lg"></a>
             {% else %}
                 <div class="p-3">
                     <p>{{ card.name.name }}</p>

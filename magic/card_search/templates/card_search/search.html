@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<form method="GET" action = "{% url 'results' %}"class="space-y-4">
+<form method="GET" action = "{% url 'card_search:results' %}"class="space-y-4">
     {% csrf_token %}
     <div>
         {{ form.set_name.label_tag}}
