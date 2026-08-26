@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView, DeleteView
 from .models import UserDeck   
 from .forms import (DeckCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -126,3 +126,15 @@ class AddCardToDeckView(LoginRequiredMixin, View):
                 {'success': False, 'error': str(e)}, 
                 status=400
             )
+
+class DeleteDeck(LoginRequiredMixin, DeleteView):
+    model = UserDeck
+    template_name = 'decks/deck_confirm_delete.html'
+    success_url = reverse_lazy('decks:list')  # Redirect after delete
+    
+    def get_object(self):
+        # Make sure user can only delete their own decks
+        obj = super().get_object()
+        if obj.user != self.request.user:
+            redirect()
+

@@ -95,11 +95,11 @@ class Search(View):
         form = CardSearchForm()
         return render(request, self.template_name, {'form': form})
 
-class CardDetailView(DetailView):
-    model = Card
-    template_name = "card_search/card.html"
+# class CardDetailView(DetailView):
+#     model = Card
+#     template_name = "card_search/card.html"
 
-class CardDetailView(LoginRequiredMixin,DetailView):
+class CardDetailView(DetailView):
 
     model = Card
     template_name = 'card_search/card.html'
