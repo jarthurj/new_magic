@@ -8,6 +8,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 from decks.models import UserDeck
+import requests
+
+
+def get_prices(scryfall_id):
+    
+    headers = {
+        'User-Agent': 'MagicDeckBuilder/1.0',
+        'Accept': 'application/json'
+    }
+    response = requests.get(
+        f'https://api.scryfall.com/cards/{scryfall_id}',
+        headers=headers
+    )
+    data = response.json()
+    purchase_uris =  data["purchase_uris"]
+    prices = data['prices']
+    return purchase_uris, prices
 
 class Home(ListView):
     model = Card
@@ -83,13 +100,15 @@ class CardDetailView(DetailView):
     template_name = "card_search/card.html"
 
 class CardDetailView(LoginRequiredMixin,DetailView):
+
     model = Card
     template_name = 'card_search/card.html'
     context_object_name = 'card'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+        pk = self.kwargs.get('pk')
+        scryfall_id = Card.objects.get(id=pk).scryfall_id
         # Add user's decks to context
         if self.request.user.is_authenticated:
             context['user_decks'] = UserDeck.objects.filter(
@@ -97,5 +116,9 @@ class CardDetailView(LoginRequiredMixin,DetailView):
             ).order_by('-created_at')
         else:
             context['user_decks'] = []
-        
+        purchase_uris, prices = get_prices(scryfall_id)
+        context['usd_price'] = prices['usd']
+        context['tcgplayer']= purchase_uris['tcgplayer']
+        context['cardmarket']= purchase_uris['cardmarket']
+        context['cardhoarder']= purchase_uris['cardhoarder']
         return context
