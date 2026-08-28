@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from card_search.models import Card
 from django.http import JsonResponse
 import json
+from django.urls import reverse_lazy
+from django.core.exceptions import PermissionDenied
 
 class DeckCreationView(LoginRequiredMixin,View):
     template_name = 'decks/deck_creation.html'
@@ -25,7 +27,6 @@ class DeckCreationView(LoginRequiredMixin,View):
             print(deck.format)
             print(deck.user)
             print(deck.id)
-            print(UserDeck.objects.get(id=11))
             return redirect('decks:deck_detail', pk=deck.id)
         return render(request, self.template_name, {'form': form})
 
@@ -51,13 +52,6 @@ class AddCardToDeckAPIView(LoginRequiredMixin, View):
             
             # Add card to deck (avoid duplicates)
             deck.card.add(card)
-            print("asssss")
-            # return JsonResponse({
-            #     'success': True,
-            #     'message': f'✅ Added {card.name} to {deck.name}',
-            #     'deck_name': deck.name,
-            #     'card_name': card.name,
-            # })
             return JsonResponse({
                 'success': True,
                 'message': f'✅ Added to deck',
@@ -127,14 +121,12 @@ class AddCardToDeckView(LoginRequiredMixin, View):
                 status=400
             )
 
-class DeleteDeck(LoginRequiredMixin, DeleteView):
+class DeleteView(DeleteView):
     model = UserDeck
-    template_name = 'decks/deck_confirm_delete.html'
-    success_url = reverse_lazy('decks:list')  # Redirect after delete
+    success_url = reverse_lazy('dashboard')
     
     def get_object(self):
-        # Make sure user can only delete their own decks
         obj = super().get_object()
         if obj.user != self.request.user:
-            redirect()
-
+            raise PermissionDenied()
+        return obj

@@ -37,12 +37,13 @@
                 >
                     Edit Deck
                 </a>
-                <a 
-                    href="#"
-                    class="bg-red-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-700 transition duration-300"
-                >
-                    Delete
-                </a>
+            <form method="POST" action="{% url 'decks:delete' pk=userdeck.pk %}" 
+                onsubmit="return confirm('Delete this deck? This cannot be undone.');">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-700">
+                    Delete Deck
+                </button>
+            </form>
             </div>
         {% endif %}
     </div>
@@ -179,20 +180,7 @@
             {% endif %}
 
         </div>
-
     </div>
-
-    <!-- Back Button -->
-    {% comment %} <div class="mt-10">
-        <a 
-            href="{% url 'decks:list' %}"
-            class="text-indigo-600 hover:text-indigo-700 font-medium flex items-center space-x-2"
-        >
-            <span>←</span>
-            <span>Back to Decks</span>
-        </a>
-    </div> {% endcomment %}
-
 </div>
 
 {% endblock %}
