@@ -46,14 +46,11 @@
                     
                     {% if user_decks %}
                         <div class="flex gap-1">
-                            <select 
-                                id="deck-select"
-                                class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring"
-                            >
+                            <select id="deck-select" class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring">
                                 <option value="">Select a deck...</option>
                                 {% for deck in user_decks %}
-                                    <option value="{{ deck.id }}">
-                                        {{ deck.name }} ({{ deck.card.count }} cards)
+                                    <option value="{{ deck.id }}" data-deck-id="{{ deck.id }}">
+                                        {{ deck.name }} (<span class="card-count">{{ deck.card.count }}</span> cards)
                                     </option>
                                 {% endfor %}
                             </select>
@@ -211,7 +208,8 @@
     }
     
     const deckId = deckSelect.value;
-
+    console.log(deckId)
+    updateDeckCount(deckId)
     if (!deckId) {
         showNotification('Please select a deck', 'warning');
         return;
@@ -242,6 +240,8 @@
         console.error('Error:', error);
         showNotification('❌ Failed to add card', 'error');
     }
+    
+    
 }
 
     function showNotification(message, type = 'info') {
@@ -262,6 +262,17 @@
             notification.remove();
         }, 4000);
     }
+
+    function updateDeckCount(deckId) {
+        const option = document.querySelector(`option[data-deck-id="${deckId}"] .card-count`);
+        if (option) {
+            option.textContent = Number(option.textContent)+1;
+            console.log(option.textContent);  // Move it inside
+        } else {
+            console.log('Option not found');  // Debug message
+        }
+    }
+
 </script>
 
 <style>
