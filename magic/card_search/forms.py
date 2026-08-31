@@ -11,8 +11,6 @@ SELECT_CLASS = (
 )
 
 class CardSearchForm(forms.Form):
-
-
     def decimal_or_none(value):
         if value == "None":
             return None
@@ -22,43 +20,34 @@ class CardSearchForm(forms.Form):
         queryset=SetName.objects.order_by('set_name'),
         required=False,
         empty_label="All Set Names",
-        widget=forms.Select(
-            attrs={'class': SELECT_CLASS}
-        )
+        widget=forms.Select(attrs={'class': SELECT_CLASS})
     )
 
     rarity = forms.ModelChoiceField(
         queryset=Rarity.objects.all(),
         required=False,
         empty_label="All Rarity",
-        widget=forms.Select(
-            attrs={'class': SELECT_CLASS}
-        )
+        widget=forms.Select(attrs={'class': SELECT_CLASS})
     )
 
     name = forms.CharField(
         required=False,
         label="Name Search",
-        widget=forms.TextInput(
-            attrs={
-                'class': SELECT_CLASS,
-                'placeholder': 'Enter card name...'
-            }
-        )
+        widget=forms.TextInput(attrs={
+            'class': SELECT_CLASS,
+            'placeholder': 'Enter card name...'
+        })
     )
+    
     type = forms.ModelChoiceField(
         queryset=Type.objects.order_by('type'),
         required=False,
         empty_label="All Types",
-        widget=forms.Select(
-            attrs={'class': SELECT_CLASS}
-        )
+        widget=forms.Select(attrs={'class': SELECT_CLASS})
     )
+    
     cmc = forms.TypedChoiceField(
-        choices=[
-            (str(v), str(v))
-            for v in Card.objects.values_list("cmc", flat=True).distinct().order_by("cmc")
-        ],
+        choices=[],  # Empty - will fill in __init__
         coerce=decimal_or_none,
         required=False,
         empty_value=None,
@@ -69,25 +58,20 @@ class CardSearchForm(forms.Form):
         queryset=Keywords.objects.order_by('keyword'),
         required=False,
         empty_label="All Keywords",
-        widget=forms.Select(
-            attrs={'class': SELECT_CLASS}
-        )
+        widget=forms.Select(attrs={'class': SELECT_CLASS})
     )
+    
     color = forms.ModelChoiceField(
         queryset=Color.objects.order_by('symbol'),
         required=False,
         empty_label="All Colors",
-        widget=forms.Select(
-            attrs={'class': SELECT_CLASS}
-        )
+        widget=forms.Select(attrs={'class': SELECT_CLASS})
     )
-
-# rarity
-# name
-# colors
-# keywords
-# type
-
-    # class Meta:
-    #     model = SetName
-    #     fields = ['set_name','rarity']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set cmc choices here, not at class definition
+        self.fields['cmc'].choices = [
+            (str(v), str(v))
+            for v in Card.objects.values_list("cmc", flat=True).distinct().order_by("cmc")
+        ]

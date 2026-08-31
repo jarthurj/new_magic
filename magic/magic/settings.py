@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'decks',
     'card_search',
+    'decks',
     'accounts',
     'django.contrib.admin',
     'django.contrib.auth',

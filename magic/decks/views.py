@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View, DetailView, DeleteView
-from .models import UserDeck   
+from .models import UserDeck,DeckCard   
 from .forms import (DeckCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from card_search.models import Card
@@ -43,13 +43,13 @@ class AddCardToDeckAPIView(LoginRequiredMixin, View):
             
             deck_id = data.get('deck_id')
             card_id = data.get('card_id')
-            
+            card_quantity = data.get('quantity')
             # Get deck (verify ownership)
             deck = UserDeck.objects.get(pk=deck_id, user=request.user)
             
             # Get card
             card = Card.objects.get(pk=card_id)
-            
+            deckcard = DeckCard.objects.create(UserDeck=deck,Card=card,quantity=card_quantity)
             # Add card to deck (avoid duplicates)
             deck.card.add(card)
             return JsonResponse({
