@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.generic import View, DetailView, DeleteView
+from django.views.generic import View, DetailView, DeleteView,ListView
 from .models import UserDeck,DeckCard   
 from .forms import (DeckCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +8,13 @@ from django.http import JsonResponse
 import json
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_control
+from django.utils.decorators import method_decorator
+
+
+class DeckListView(ListView):
+    model = UserDeck
+    template_name = 'decks/deck_list.html'
 
 class DeckCreationView(LoginRequiredMixin,View):
     template_name = 'decks/deck_creation.html'
@@ -30,6 +37,7 @@ class DeckCreationView(LoginRequiredMixin,View):
             return redirect('decks:deck_detail', pk=deck.id)
         return render(request, self.template_name, {'form': form})
 
+@method_decorator(cache_control(no_cache=True, no_store=True, must_revalidate=True), name='dispatch')
 class DeckDetailView(DetailView):
     model = UserDeck
     template_name = "decks/deck_detail.html"

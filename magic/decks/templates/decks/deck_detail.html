@@ -60,7 +60,7 @@
 
                 <div>
                     <p class="text-sm text-gray-500">Total Cards</p>
-                    <p class="text-2xl font-bold text-indigo-600">{{ userdeck.card.count }}</p>
+                    <p class="text-2xl font-bold text-indigo-600">{{ userdeck.total_cards }}</p>
                 </div>
 
                 <div class="border-t border-gray-200 pt-4">
@@ -123,16 +123,16 @@
                 {% endif %}
             </div>
 
-            {% if userdeck.card.all %}
+            {% if userdeck.deckcards.all %}
                 <div class="space-y-3">
-                    {% for c in userdeck.card.all %}
+                    {% for dc in userdeck.deckcards.all %}
                         <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200 transition duration-300">
                             
                             <div class="flex items-center space-x-4">
-                                {% if c.image_uri %}
+                                {% if dc.card.image_uri %}
                                     <img 
-                                        src="{{ c.image_uri }}" 
-                                        alt="{{ c.name }}"
+                                        src="{{ dc.card.image_uri }}" 
+                                        alt="{{ dc.card.name }}"
                                         class="w-12 h-16 rounded object-cover shadow"
                                     >
                                 {% else %}
@@ -143,20 +143,23 @@
                                 
                                 <div>
                                     <h3 class="font-semibold text-gray-900">
-                                        <a href="{% url 'card_search:card' c.id%}" class="hover:text-indigo-600">
-                                            {{ c.name }}
+                                        <a href="{% url 'card_search:card' dc.card.id %}" class="hover:text-indigo-600">
+                                            {{ dc.card.name }}
                                         </a>
                                     </h3>
-                                    <p class="text-sm text-gray-500">{{ c.type }}</p>
+                                    <p class="text-sm text-gray-500">{{ dc.card.type }}</p>
                                 </div>
                             </div>
 
                             <div class="flex items-center space-x-4">
                                 <div class="text-right">
-                                    <p class="text-sm text-gray-500">{{ c.set_name }}</p>
+                                    <p class="text-sm text-gray-500">{{ dc.card.set_name }}</p>
                                     <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
-                                        {{ c.rarity }}
+                                        {{ dc.card.rarity }}
                                     </span>
+                                </div>
+                                <div class="font-semibold text-lg">
+                                    x{{ dc.quantity }}
                                 </div>
                             </div>
 

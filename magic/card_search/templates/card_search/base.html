@@ -14,7 +14,9 @@
     <nav class="bg-emerald-900 text-white p-4">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <a href="{% url 'card_search:home' %}" class="hover:text-amber-500"><h1 class="text-xl font-bold">MAGIC</h1></a>
+            
             <div class="space-x-4">
+                <a href="{% url 'decks:decks_list' %}" class="hover:text-amber-500">DECKS</a>
                 {% if not user.is_authenticated %}
                     <a href="{% url 'card_search:home' %}" class="hover:text-amber-500">Home</a>
                 {% else %}

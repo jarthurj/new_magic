@@ -1,28 +1,7 @@
 from django.db import models
 from card_search.models import Card
 from django.conf import settings
-
-# class Deck(models.Model):
-#     name = models.CharField(max_length=100)
-#     card = models.ManyToManyField(Card,related_name="cards",blank=True)
-#     shared = models.BooleanField(default=False)
-#     user = models.ManyToManyField(
-#         settings.AUTH_USER_MODEL,
-#         related_name="users",
-#         blank=True,)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     source_deck = models.ForeignKey(
-#         UserDeck,
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#         related_name="copies",
-#     )
-
-#     def __str__(self):
-#         return self.name
+from django.db.models import Sum
 
 class UserDeck(models.Model):
     FORMAT_CHOICES = [
@@ -44,7 +23,11 @@ class UserDeck(models.Model):
         pass
     def __str__(self):
         return self.name
+    def total_cards(self):
+        total = self.deckcards.aggregate(total=Sum('quantity'))['total']
+        return total or 0
+
 class DeckCard(models.Model):
-    deck = models.ForeignKey(UserDeck, on_delete=models.CASCADE)
+    deck = models.ForeignKey(UserDeck, on_delete=models.CASCADE,related_name="deckcards")
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
