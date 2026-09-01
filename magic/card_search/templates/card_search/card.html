@@ -205,19 +205,19 @@
 <script>
    async function addCardToDeck(cardId) {
     const deckSelect = document.getElementById('deck-select');
+    console.log(deckSelect);
     const quantityInput = document.getElementById('quantity-input');
     
     // ✅ Add this check
     if (!deckSelect) {
         showNotification('❌ Deck selector not found', 'error');
-        console.error('Element with id="deck-select" not found in DOM');
+        console.error('Element with id="dec-select" not found in DOM');
         return;
     }
     
     const deckId = deckSelect.value;
     const quantity = parseInt(quantityInput.value)
     console.log(deckId)
-    updateDeckCount(deckId)
     if (!deckId) {
         showNotification('Please select a deck', 'warning');
         return;

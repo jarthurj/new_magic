@@ -38,32 +38,36 @@ class AddCardToDeckAPIView(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
-            
             data = json.loads(request.body)
-            
             deck_id = data.get('deck_id')
             card_id = data.get('card_id')
-            card_quantity = data.get('quantity')
-            # Get deck (verify ownership)
-            deck = UserDeck.objects.get(pk=deck_id, user=request.user)
+            quantity = int(data.get('card_quantity', 1))
             
-            # Get card
+            if quantity < 1:
+                return JsonResponse({'success': False, 'error': 'Quantity must be at least 1'}, status=400)
+            
+            deck = UserDeck.objects.get(pk=deck_id, user=request.user)
             card = Card.objects.get(pk=card_id)
-            deckcard = DeckCard.objects.create(UserDeck=deck,Card=card,quantity=card_quantity)
-            # Add card to deck (avoid duplicates)
-            deck.card.add(card)
-            return JsonResponse({
-                'success': True,
-                'message': f'✅ Added to deck',
-            })
+            
+            # Create or update DeckCard
+            deckcard, created = DeckCard.objects.get_or_create(
+                deck=deck, card=card,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                deckcard.quantity += quantity
+                deckcard.save()
+            
+            return JsonResponse({'success': True, 'message': '✅ Added to deck'})
         
-        except UserDeck.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Deck not found'}, status=404)
-        except Card.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Card not found'}, status=404)
+        except json.JSONDecodeError:
+                return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        except (UserDeck.DoesNotExist, Card.DoesNotExist) as e:
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: not found'}, status=404)
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': f'Invalid input: {str(e)}'}, status=400)
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=400)
-        
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: {str(e)}'}, status=400)
 class AddCardToDeckView(LoginRequiredMixin, View):
     """
     Handles adding a card to a deck via AJAX/Fetch request
