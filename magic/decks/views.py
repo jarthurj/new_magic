@@ -42,6 +42,10 @@ class DeckDetailView(DetailView):
     model = UserDeck
     template_name = "decks/deck_detail.html"
 
+class DeckDetailViewPublic(DetailView):
+    model = UserDeck
+    template_name = "decks/deck_detail_public.html"
+
 class AddCardToDeckAPIView(LoginRequiredMixin, View):
 
     def post(self, request):

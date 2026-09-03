@@ -47,14 +47,10 @@
                             {% endif %}
 
                             <!-- Stats -->
-                            <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="grid gap-4 mb-4">
                                 <div class="bg-indigo-50 rounded-lg p-3 text-center">
                                     <p class="text-2xl font-bold text-indigo-600">{{ deck.total_cards }}</p>
                                     <p class="text-xs text-gray-600">Total Cards</p>
-                                </div>
-                                <div class="bg-blue-50 rounded-lg p-3 text-center">
-                                    <p class="text-2xl font-bold text-blue-600">{{ deck.cards.count }}</p>
-                                    <p class="text-xs text-gray-600">Unique Cards</p>
                                 </div>
                             </div>
 
@@ -67,7 +63,7 @@
 
                         <!-- Actions -->
                         <div class="bg-gray-50 px-6 py-4">
-                            <a href="{% url 'decks:detail' deck.id %}" class="w-full block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded text-center text-sm transition">
+                            <a href="{% url 'decks:deck_detail_public' deck.id %}" class="w-full block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded text-center text-sm transition">
                                 View Deck
                             </a>
                         </div>

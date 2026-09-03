@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib import admin
 from .views import (DeckCreationView,DeckDetailView, 
                     AddCardToDeckView,AddCardToDeckAPIView,
-                    DeleteView,DeckListView)
+                    DeleteView,DeckListView,DeckDetailViewPublic)
 
 app_name = 'decks'
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path('<int:pk>/add-card/', AddCardToDeckView.as_view(), name='add_card'),
     path('<int:pk>/delete/',DeleteView.as_view(),name="delete"),
     path('api/add-card/', AddCardToDeckAPIView.as_view(), name='api_add_card'),
-    path('decks_list/',DeckListView.as_view(), name='decks_list')
+    path('decks_list/',DeckListView.as_view(), name='decks_list'),
+    path('<int:pk>/detail_public/',DeckDetailViewPublic.as_view(), name="deck_detail_public")
 ]

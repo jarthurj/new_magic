@@ -1,0 +1,145 @@
+{% extends "card_search/base.html" %}
+
+{% block title %}
+    {{ userdeck.name }} - Deck
+{% endblock %}
+
+{% block content %}
+
+<div class="mx-auto max-w-7xl px-6 py-10">
+
+    <!-- Header with Deck Title -->
+    <div class="mb-10 flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                {{ userdeck.name }}
+            </h1>
+            <p class="text-lg text-white-000">
+                {{ userdeck.get_format_display }}
+                {% if userdeck.private %}
+                    <span class="ml-3 inline-block rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                        Private
+                    </span>
+                {% else %}
+                    <span class="ml-3 inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                        Public
+                    </span>
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Deck Overview -->
+    <div class="grid gap-10 lg:grid-cols-3 mb-10">
+
+        <!-- Deck Stats Card -->
+        <div class="lg:col-span-1 rounded-2xl bg-white p-8 shadow-xl h-fit">
+            
+            <h2 class="mb-6 text-lg font-semibold text-gray-800">Deck Overview</h2>
+
+            <div class="space-y-4">
+
+                <div>
+                    <p class="text-sm text-gray-500">Total Cards</p>
+                    <p class="text-2xl font-bold text-indigo-600">{{ userdeck.total_cards }}</p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Format</p>
+                    <p class="font-medium text-gray-900">
+                        {{ userdeck.get_format_display }}
+                    </p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Created</p>
+                    <p class="font-medium text-gray-900">
+                        {{ userdeck.created_at|date:"M d, Y" }}
+                    </p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Last Updated</p>
+                    <p class="font-medium text-gray-900">
+                        {{ userdeck.updated_at|date:"M d, Y" }}
+                    </p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Owner</p>
+                    <p class="font-medium text-gray-900">
+                        {{ userdeck.user.username }}
+                    </p>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Privacy</p>
+                    {% if userdeck.private %}
+                        <span class="inline-block rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                            Private
+                        </span>
+                    {% else %}
+                        <span class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                            Public
+                        </span>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Cards List -->
+        <div class="lg:col-span-2 rounded-2xl bg-white p-8 shadow-xl">
+
+            {% if userdeck.deckcards.all %}
+                <div class="space-y-3">
+                    {% for dc in userdeck.deckcards.all %}
+                        <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200 transition duration-300">
+                            
+                            <div class="flex items-center space-x-4">
+                                {% if dc.card.image_uri %}
+                                    <img 
+                                        src="{{ dc.card.image_uri }}" 
+                                        alt="{{ dc.card.name }}"
+                                        class="w-12 h-16 rounded object-cover shadow"
+                                    >
+                                {% else %}
+                                    <div class="w-12 h-16 rounded bg-gray-200 flex items-center justify-center">
+                                        <span class="text-xs text-gray-400">No image</span>
+                                    </div>
+                                {% endif %}
+                                
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">
+                                        <a href="{% url 'card_search:card' dc.card.id %}" class="hover:text-indigo-600">
+                                            {{ dc.card.name }}
+                                        </a>
+                                    </h3>
+                                    <p class="text-sm text-gray-500">{{ dc.card.type }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-4">
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500">{{ dc.card.set_name }}</p>
+                                    <span class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
+                                        {{ dc.card.rarity }}
+                                    </span>
+                                </div>
+                                <div class="font-semibold text-lg">
+                                    x{{ dc.quantity }}
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
