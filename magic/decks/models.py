@@ -27,6 +27,14 @@ class UserDeck(models.Model):
         total = self.deckcards.aggregate(total=Sum('quantity'))['total']
         return total or 0
 
+    def copy_deck(self,user):
+        new_deck = UserDeck.objects.create(name = self.name,
+                                           format = self.format,
+                                           user = user)
+        for c in self.deckcards:
+            DeckCard.objects.create(deck=new_deck,card=c.card,quantity=c.quantity)
+
+
 class DeckCard(models.Model):
     deck = models.ForeignKey(UserDeck, on_delete=models.CASCADE,related_name="deckcards")
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
