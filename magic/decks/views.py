@@ -48,6 +48,7 @@ class DeckDetailViewPublic(DetailView):
 
 class AddCardToDeckAPIView(LoginRequiredMixin, View):
 
+
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -138,6 +139,7 @@ class AddCardToDeckView(LoginRequiredMixin, View):
             )
 
 class DeleteView(DeleteView):
+
     model = UserDeck
     success_url = reverse_lazy('dashboard')
     
@@ -146,3 +148,22 @@ class DeleteView(DeleteView):
         if obj.user != self.request.user:
             raise PermissionDenied()
         return obj
+
+class CopyDeckAPIView(LoginRequiredMixin, View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            deck_id = data.get('deck_id')
+            old_deck = UserDeck.objects.get(pk=deck_id)
+            old_deck.copy_deck(user=request.user)
+
+            return JsonResponse({'success': True, 'message': '✅ Added to deck'})
+        
+        except json.JSONDecodeError:
+                return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        except (UserDeck.DoesNotExist) as e:
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: not found'}, status=404)
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': f'Invalid input: {str(e)}'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: {str(e)}'}, status=400)

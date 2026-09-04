@@ -68,6 +68,14 @@
                             </a>
                         </div>
 
+                        <div class="bg-gray-50 px-6 py-4">
+                            <button 
+                                onclick="CopyDeck({{ deck.id }})"
+                                class="w-full block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded text-center text-sm transition"
+                            >
+                                Copy Deck
+                            </button>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -97,4 +105,76 @@
 
     </div>
 </div>
+<div id="notification-container" class="fixed top-4 right-4 z-50"></div>
+
+<script>
+   async function CopyDeck(deckId) {
+
+    if (!deckId) {
+        showNotification('Error with deckId', 'warning');
+        return;
+    }
+
+    try {
+        const response = await fetch('{% url "decks:api_copy_deck" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: JSON.stringify({
+                deck_id: deckId,
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showNotification(data.message, 'success');
+            deckSelect.value = '';
+        } else {
+            showNotification(`❌ ${data.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('❌ Failed to add card', 'error');
+    }
+}
+
+    function showNotification(message, type = 'info') {
+        const container = document.getElementById('notification-container');
+        
+        const notification = document.createElement('div');
+        notification.className = `p-4 rounded-lg text-white font-semibold mb-3 animate-fade-in ${
+            type === 'success' ? 'bg-green-500' :
+            type === 'error' ? 'bg-red-500' :
+            type === 'warning' ? 'bg-yellow-500' :
+            'bg-blue-500'
+        }`;
+        notification.textContent = message;
+        
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+</style>
 {% endblock %}

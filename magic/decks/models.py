@@ -31,11 +31,20 @@ class UserDeck(models.Model):
         new_deck = UserDeck.objects.create(name = self.name,
                                            format = self.format,
                                            user = user)
-        for c in self.deckcards:
-            DeckCard.objects.create(deck=new_deck,card=c.card,quantity=c.quantity)
+        for c in self.deckcards.all():
+            dc = DeckCard.objects.create(deck=new_deck,card=c.card,quantity=c.quantity)
+            dc.save()
+            
 
 
 class DeckCard(models.Model):
     deck = models.ForeignKey(UserDeck, on_delete=models.CASCADE,related_name="deckcards")
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        deck_name = self.deck.name
+        card_name = self.card.name
+        quantity = self.quantity
+        stringer = f'Deck Name:{deck_name} Card Name:{card_name} quantity:{quantity}'
+        return stringer

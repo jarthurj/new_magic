@@ -250,8 +250,6 @@
         console.error('Error:', error);
         showNotification('❌ Failed to add card', 'error');
     }
-    
-    
 }
 
     function showNotification(message, type = 'info') {
@@ -272,17 +270,6 @@
             notification.remove();
         }, 4000);
     }
-
-    {% comment %} function updateDeckCount(deckId) {
-        const option = document.querySelector(`option[data-deck-id="${deckId}"] .card-count`);
-        if (option) {
-            option.textContent = Number(option.textContent)+1;
-            console.log(option.textContent);  // Move it inside
-        } else {
-            console.log('Option not found');  // Debug message
-        }
-    } {% endcomment %}
-
 </script>
 
 <style>
