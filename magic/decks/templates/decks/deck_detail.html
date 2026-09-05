@@ -158,9 +158,19 @@
                                         {{ dc.card.rarity }}
                                     </span>
                                 </div>
-                                <div class="font-semibold text-lg">
-                                    x{{ dc.quantity }}
-                                </div>
+                                <button 
+                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }}, {{ dc.quantity }} - 1)"
+                                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded transition"
+                                >
+                                    −
+                                </button>
+                                <span id="qty-{{ dc.id }}" class="font-semibold text-gray-900 min-w-[2rem] text-center">{{ dc.quantity }}</span>
+                                <button 
+                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }}, {{ dc.quantity }} + 1)"
+                                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded transition"
+                                >
+                                    +
+                                </button>
                             </div>
 
                         </div>
@@ -185,5 +195,81 @@
         </div>
     </div>
 </div>
+<script>
+   async function updateQuantity(deckId,cardId,quantity) {
 
+    if (!deckId) {
+        showNotification('Error with deckId', 'warning');
+        return;
+    }
+
+    try {
+        const response = await fetch('{% url "decks:api_card_quantity" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: JSON.stringify({
+                deck_id: deckId,
+                card_id: cardId,
+                quantity: quantity
+            })
+        });
+        if (response.ok) {
+            // Update the span without reloading
+            document.getElementById(`qty-${deckCardId}`).textContent = newQuantity;
+        } else {
+            alert('Failed to update quantity');
+        }
+        const data = await response.json();
+
+        if (data.success) {
+            showNotification(data.message, 'success');
+            deckSelect.value = '';
+        } else {
+            showNotification(`❌ ${data.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('❌ Failed to add card', 'error');
+    }
+}
+
+    function showNotification(message, type = 'info') {
+        const container = document.getElementById('notification-container');
+        
+        const notification = document.createElement('div');
+        notification.className = `p-4 rounded-lg text-white font-semibold mb-3 animate-fade-in ${
+            type === 'success' ? 'bg-green-500' :
+            type === 'error' ? 'bg-red-500' :
+            type === 'warning' ? 'bg-yellow-500' :
+            'bg-blue-500'
+        }`;
+        notification.textContent = message;
+        
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+</style>
 {% endblock %}

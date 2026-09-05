@@ -3,7 +3,7 @@ from django.contrib import admin
 from .views import (DeckCreationView,DeckDetailView, 
                     AddCardToDeckView,AddCardToDeckAPIView,
                     DeleteView,DeckListView,DeckDetailViewPublic,
-                    CopyDeckAPIView)
+                    CopyDeckAPIView,CardQuantityView)
 
 app_name = 'decks'
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path('api/add-card/', AddCardToDeckAPIView.as_view(), name='api_add_card'),
     path('api/copy-deck/', CopyDeckAPIView.as_view(), name='api_copy_deck'),
     path('decks_list/',DeckListView.as_view(), name='decks_list'),
-    path('<int:pk>/detail_public/',DeckDetailViewPublic.as_view(), name="deck_detail_public")
+    path('<int:pk>/detail_public/',DeckDetailViewPublic.as_view(), name="deck_detail_public"),
+    path('api/card_quantity/',CardQuantityView.as_view(),name="api_card_quantity")
 ]

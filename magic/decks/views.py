@@ -167,3 +167,31 @@ class CopyDeckAPIView(LoginRequiredMixin, View):
             return JsonResponse({'success': False, 'error': f'Invalid input: {str(e)}'}, status=400)
         except Exception as e:
             return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: {str(e)}'}, status=400)
+
+class CardQuantityView(LoginRequiredMixin, View):
+    def post(self, request):
+        try:
+            
+            data = json.loads(request.body)
+            deck_id = data.get('deck_id')
+            card_id = data.get('card_id')
+            quantity = data.get('quantity')
+            print(f"deckid:{deck_id} cardid:{card_id} quantity:{quantity}")
+            print(type(deck_id)," ",type(card_id)," ",type(quantity))
+            print(DeckCard.objects.filter(deck=deck_id).values())
+            print(DeckCard.objects.filter(deck=deck_id).filter(card=card_id).values())
+            dc = DeckCard.objects.get(deck=deck_id,card=card_id)
+            print("asssss")
+            dc.quantity = quantity
+            dc.save()
+            print("asasssssss")
+            return JsonResponse({'success': True, 'message': '✅ Added to deck'})
+        
+        except json.JSONDecodeError:
+                return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        except (UserDeck.DoesNotExist) as e:
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: not found'}, status=404)
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': f'Invalid input: {str(e)}'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': f'{e.__class__.__name__}: {str(e)}'}, status=400)
