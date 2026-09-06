@@ -176,15 +176,12 @@ class CardQuantityView(LoginRequiredMixin, View):
             deck_id = data.get('deck_id')
             card_id = data.get('card_id')
             quantity = data.get('quantity')
-            print(f"deckid:{deck_id} cardid:{card_id} quantity:{quantity}")
-            print(type(deck_id)," ",type(card_id)," ",type(quantity))
-            print(DeckCard.objects.filter(deck=deck_id).values())
-            print(DeckCard.objects.filter(deck=deck_id).filter(card=card_id).values())
             dc = DeckCard.objects.get(deck=deck_id,card=card_id)
-            print("asssss")
-            dc.quantity = quantity
-            dc.save()
-            print("asasssssss")
+            if quantity !=0:
+                dc.quantity = quantity
+                dc.save()
+            else:
+                dc.delete()
             return JsonResponse({'success': True, 'message': '✅ Added to deck'})
         
         except json.JSONDecodeError:

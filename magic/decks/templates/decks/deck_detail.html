@@ -126,9 +126,9 @@
             {% if userdeck.deckcards.all %}
                 <div class="space-y-3">
                     {% for dc in userdeck.deckcards.all %}
-                        <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200 transition duration-300">
+                        <div id="dc_{{dc.id}}" class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200 transition duration-300" >
                             
-                            <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-4" >
                                 {% if dc.card.image_uri %}
                                     <img 
                                         src="{{ dc.card.image_uri }}" 
@@ -159,14 +159,14 @@
                                     </span>
                                 </div>
                                 <button 
-                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }}, {{ dc.quantity }} - 1)"
+                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }},-1,{{dc.id}})"
                                     class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded transition"
                                 >
                                     −
                                 </button>
                                 <span id="qty-{{ dc.id }}" class="font-semibold text-gray-900 min-w-[2rem] text-center">{{ dc.quantity }}</span>
                                 <button 
-                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }}, {{ dc.quantity }} + 1)"
+                                    onclick="updateQuantity({{userdeck.id}},{{ dc.card.id }},1,{{dc.id}})"
                                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded transition"
                                 >
                                     +
@@ -196,13 +196,11 @@
     </div>
 </div>
 <script>
-   async function updateQuantity(deckId,cardId,quantity) {
-
-    if (!deckId) {
-        showNotification('Error with deckId', 'warning');
-        return;
+   async function updateQuantity(deckId,cardId,quantity_change,dcId) {
+    quantity = parseInt(document.getElementById(`qty-${dcId}`).textContent)+quantity_change
+    if (quantity==0){
+        document.getElementById(`dc_${dcId}`).remove();
     }
-
     try {
         const response = await fetch('{% url "decks:api_card_quantity" %}', {
             method: 'POST',
@@ -216,44 +214,26 @@
                 quantity: quantity
             })
         });
-        if (response.ok) {
-            // Update the span without reloading
-            document.getElementById(`qty-${deckCardId}`).textContent = newQuantity;
-        } else {
-            alert('Failed to update quantity');
+        if(quantity!=0){
+            if (response.ok) {
+                // Update the span without reloading
+                document.getElementById(`qty-${dcId}`).textContent = quantity;
+            } else {
+                alert('Failed to update quantity');
+            }
         }
         const data = await response.json();
-
+        console.log(data)
         if (data.success) {
-            showNotification(data.message, 'success');
-            deckSelect.value = '';
+            console.log("added card succussfully")
         } else {
-            showNotification(`❌ ${data.error}`, 'error');
+            console.error('Error:', error);
         }
     } catch (error) {
         console.error('Error:', error);
-        showNotification('❌ Failed to add card', 'error');
     }
 }
 
-    function showNotification(message, type = 'info') {
-        const container = document.getElementById('notification-container');
-        
-        const notification = document.createElement('div');
-        notification.className = `p-4 rounded-lg text-white font-semibold mb-3 animate-fade-in ${
-            type === 'success' ? 'bg-green-500' :
-            type === 'error' ? 'bg-red-500' :
-            type === 'warning' ? 'bg-yellow-500' :
-            'bg-blue-500'
-        }`;
-        notification.textContent = message;
-        
-        container.appendChild(notification);
-
-        setTimeout(() => {
-            notification.remove();
-        }, 4000);
-    }
 </script>
 
 <style>
