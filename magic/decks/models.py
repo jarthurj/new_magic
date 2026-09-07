@@ -34,6 +34,17 @@ class UserDeck(models.Model):
         for c in self.deckcards.all():
             dc = DeckCard.objects.create(deck=new_deck,card=c.card,quantity=c.quantity)
             dc.save()
+    def commander_compliant(self):
+        legend = False
+        for dc in self.deckcards.all():
+            if dc.quantity > 1:
+                if "land" not in dc.card.type.lower():
+                    return False
+            if "legend" in dc.card.type.lower():
+                legend = True
+        if legend:
+            return True
+        return False
             
 
 
