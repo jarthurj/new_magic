@@ -38,9 +38,9 @@ class UserDeck(models.Model):
         legend = False
         for dc in self.deckcards.all():
             if dc.quantity > 1:
-                if "land" not in dc.card.type.lower():
+                if "land" not in dc.card.type.type.lower():
                     return False
-            if "legend" in dc.card.type.lower():
+            if "legend" in dc.card.type.type.lower():
                 legend = True
         if legend:
             return True
