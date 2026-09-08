@@ -37,6 +37,8 @@ class UserDeck(models.Model):
     def commander_compliant(self):
         legend = False
         for dc in self.deckcards.all():
+            if not dc.card.commander_legal:
+                return False
             if dc.quantity > 1:
                 if "land" not in dc.card.type.type.lower():
                     return False
