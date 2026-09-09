@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View, DetailView, DeleteView,ListView
+
+from card_search.views import get_prices
 from .models import UserDeck,DeckCard   
 from .forms import (DeckCreationForm)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,13 +44,12 @@ class DeckDetailView(DetailView):
     model = UserDeck
     template_name = "decks/deck_detail.html"
 
+
 class DeckDetailViewPublic(DetailView):
     model = UserDeck
     template_name = "decks/deck_detail_public.html"
 
 class AddCardToDeckAPIView(LoginRequiredMixin, View):
-
-
     def post(self, request):
         try:
             data = json.loads(request.body)

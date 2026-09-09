@@ -2,6 +2,7 @@ from django.db import models
 from card_search.models import Card
 from django.conf import settings
 from django.db.models import Sum
+import requests
 
 class UserDeck(models.Model):
     FORMAT_CHOICES = [
@@ -47,9 +48,27 @@ class UserDeck(models.Model):
         if legend:
             return True
         return False
-            
 
-
+    def full_deck_price_estimate(self):
+        total_price = 0
+        for dc in self.deckcards.all():
+            card_price = self.get_prices(dc.card.scryfall_id)['usd']
+            if card_price:
+                total_price += float(card_price)
+        return total_price
+    def get_prices(self,scryfall_id):
+        
+        headers = {
+            'User-Agent': 'MagicDeckBuilder/1.0',
+            'Accept': 'application/json'
+        }
+        response = requests.get(
+            f'https://api.scryfall.com/cards/{scryfall_id}',
+            headers=headers
+        )
+        data = response.json()
+        prices = data['prices']
+        return prices
 class DeckCard(models.Model):
     deck = models.ForeignKey(UserDeck, on_delete=models.CASCADE,related_name="deckcards")
     card = models.ForeignKey(Card, on_delete=models.CASCADE)

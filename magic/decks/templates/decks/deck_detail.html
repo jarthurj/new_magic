@@ -95,7 +95,12 @@
                         {{ userdeck.user.username }}
                     </p>
                 </div>
-
+                <div class="border-t border-gray-200 pt-4">
+                    <p class="text-sm text-gray-500">Estimated Price</p>
+                    <p class="font-medium text-gray-900">
+                        {{ userdeck.full_deck_price_estimate }}
+                    </p>
+                </div>
                 <div class="border-t border-gray-200 pt-4">
                     <p class="text-sm text-gray-500">Privacy</p>
                     {% if userdeck.private %}
